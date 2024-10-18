@@ -10,3 +10,7 @@
 4. ORM: gorm.io/gorm
 5. Logging: github.com/sirupsen/logrus
 6. Testing: github.com/stretchr/testify
+
+## Notes
+
+* allow to fix go.mod with `go mod tidy` command
