@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	v1 "go-boilerplate-api/internal/api/v1"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -48,8 +49,8 @@ func startServer(cmd *cobra.Command, args []string) {
 		ctx.JSON(http.StatusOK, gin.H{"status": "OK"})
 	})
 
-	// apiV1Router := server.Group("/v1")
-	// v1.RegisterRouterApiV1(apiV1Router)
+	apiV1Router := server.Group("/v1")
+	v1.RegisterRouterApiV1(apiV1Router)
 
 	port := viper.GetInt32("server.port")
 	startEndpoint := fmt.Sprintf("localhost:%d", port)
