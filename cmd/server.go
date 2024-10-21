@@ -5,7 +5,9 @@ package cmd
 
 import (
 	"fmt"
+	"go-boilerplate-api/db"
 	v1 "go-boilerplate-api/internal/api/v1"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -41,16 +43,29 @@ func init() {
 }
 
 func startServer(cmd *cobra.Command, args []string) {
+	// connect database
+	db, err := db.NewDatabase()
+	if err != nil {
+		log.Fatal("Can't connect database")
+	}
+
 	server := gin.New()
 
-	defer func() {}()
+	defer func() {
+		sqlDB, _ := db.Client.DB()
+		if closingErr := sqlDB.Close(); closingErr != nil {
+			log.Fatal(err)
+		} else {
+			log.Println("Closed db connection")
+		}
+	}()
 
 	server.GET("/health", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"status": "OK"})
 	})
 
 	apiV1Router := server.Group("/v1")
-	v1.RegisterRouterApiV1(apiV1Router)
+	v1.RegisterRouterApiV1(apiV1Router, db)
 
 	port := viper.GetInt32("server.port")
 	startEndpoint := fmt.Sprintf("localhost:%d", port)

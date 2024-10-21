@@ -1,8 +1,12 @@
 package v1
 
-import "github.com/gin-gonic/gin"
+import (
+	"go-boilerplate-api/db"
 
-func RegisterRouterApiV1(router *gin.RouterGroup) {
+	"github.com/gin-gonic/gin"
+)
+
+func RegisterRouterApiV1(router *gin.RouterGroup, db *db.Database) {
 	recordsGroup := router.Group("/todos")
 	SetTodoRoutes(recordsGroup)
 }
