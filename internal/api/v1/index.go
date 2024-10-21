@@ -8,5 +8,5 @@ import (
 
 func RegisterRouterApiV1(router *gin.RouterGroup, db *db.Database) {
 	recordsGroup := router.Group("/todos")
-	SetTodoRoutes(recordsGroup)
+	SetTodoRoutes(recordsGroup, db)
 }

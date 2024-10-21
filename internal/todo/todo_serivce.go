@@ -1,14 +1,18 @@
 package todo
 
+import "go-boilerplate-api/db"
+
 type TodoService interface {
 	GetItem(id string)
 	Delete(description string)
 }
 
-type todoService struct{}
+type todoService struct {
+	database *db.Database
+}
 
-func ConstructService() TodoService {
-	return &todoService{}
+func ConstructService(db *db.Database) TodoService {
+	return &todoService{database: db}
 }
 
 func (t *todoService) GetItem(id string) {}

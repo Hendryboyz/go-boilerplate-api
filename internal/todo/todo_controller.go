@@ -1,6 +1,10 @@
 package todo
 
-import "github.com/gin-gonic/gin"
+import (
+	"go-boilerplate-api/db"
+
+	"github.com/gin-gonic/gin"
+)
 
 type TodoController interface {
 	Create(*gin.Context)
@@ -13,8 +17,8 @@ type todoController struct {
 	service TodoService
 }
 
-func ConstructController() TodoController {
-	return &todoController{service: ConstructService()}
+func ConstructController(db *db.Database) TodoController {
+	return &todoController{service: ConstructService(db)}
 }
 
 func (t *todoController) Create(*gin.Context) {
