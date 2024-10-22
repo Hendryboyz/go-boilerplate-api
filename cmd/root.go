@@ -59,8 +59,8 @@ func initConfig() {
 		viper.SetConfigName("local")
 		viper.SetConfigType("yaml")
 
-		viper.AddConfigPath("../config/")
-		viper.AddConfigPath("config/")
+		viper.AddConfigPath("../configs/")
+		viper.AddConfigPath("configs/")
 	}
 
 	viper.AutomaticEnv()

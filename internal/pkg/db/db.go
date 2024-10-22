@@ -2,7 +2,7 @@ package db
 
 import (
 	"fmt"
-	"log"
+	"go-boilerplate-api/internal/pkg/log"
 
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
@@ -23,13 +23,16 @@ func NewDatabase() (*Database, error) {
 
 	sqlDb, err := db.DB()
 	if err != nil {
-		log.Fatal("Failed to connect database: ", err)
+		log.Fatal(
+			"failed to connect database",
+			log.String("reason", err.Error()),
+		)
 	}
 	maxConnection := viper.GetInt("db.maxConnection")
 	sqlDb.SetMaxOpenConns(maxConnection)
 
-	if enableAutoMigration := viper.GetBool("db.autoMigration"); enableAutoMigration == true {
-		fmt.Println("auto migrate db")
+	if viper.GetBool("db.autoMigration") {
+		log.Warn("auto migrate db")
 	}
 
 	return &Database{

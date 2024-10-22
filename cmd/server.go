@@ -7,7 +7,7 @@ import (
 	"fmt"
 	v1 "go-boilerplate-api/internal/app/api/v1"
 	"go-boilerplate-api/internal/pkg/db"
-	"log"
+	"go-boilerplate-api/internal/pkg/log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -54,10 +54,11 @@ func startServer(cmd *cobra.Command, args []string) {
 	defer func() {
 		sqlDB, _ := db.Client.DB()
 		if closingErr := sqlDB.Close(); closingErr != nil {
-			log.Fatal(err)
+			log.Fatal(err.Error())
 		} else {
-			log.Println("Closed db connection")
+			log.Info("Closed db connection")
 		}
+		log.Sync()
 	}()
 
 	server.GET("/health", func(ctx *gin.Context) {
@@ -69,6 +70,6 @@ func startServer(cmd *cobra.Command, args []string) {
 
 	port := viper.GetInt32("server.port")
 	startEndpoint := fmt.Sprintf("localhost:%d", port)
-	fmt.Println(startEndpoint)
+	log.Info(fmt.Sprintf("server start at %s", startEndpoint))
 	server.Run(startEndpoint)
 }
