@@ -4,4 +4,4 @@ server:
 db:
   dsn: postgresql://henry_chou:admin1337tw@localhost:5432/my-demo-db?sslmode=disable
   maxConnection: 50
-  autoMigration: true
+  autoMigration: false

@@ -33,6 +33,7 @@ func NewDatabase() (*Database, error) {
 
 	if viper.GetBool("db.autoMigration") {
 		log.Warn("auto migrate db")
+		AutoMigrate(db)
 	}
 
 	return &Database{
