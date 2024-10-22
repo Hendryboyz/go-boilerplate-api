@@ -31,6 +31,17 @@ go build -o api
 api --help # check the admin command for this server
 ```
 
+```bash
+docker build -t my-golang-webapp:latest .
+docker run --env GIN_MODE=release \
+   --name api \
+   --mount type=bind,src=/Users/henry.chou/sources/go-boilerplate-api/configs/local.yml,dst=/app/configs/local.yml \
+   --network=host \
+   -p 8081:8081 \
+   my-golang-webapp:latest
+docker rm $(docker container ls --filter "ancestor=my-golang-webapp" -aq | head -n 1)
+```
+
 ## Notes
 
 * Fix go.mod with `go mod tidy` command
