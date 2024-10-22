@@ -4,7 +4,6 @@ import (
 	"io"
 	"os"
 
-	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -126,12 +125,18 @@ func New(writer io.Writer, level Level) *Logger {
 }
 
 func newLoggerConfig() zap.Config {
-	environment := viper.GetString("server.environment")
-	if environment == "production" {
-		return zap.NewProductionConfig()
+	mode := os.Getenv("GIN_MODE")
+	var cfg zap.Config
+	if mode == "release" {
+		cfg = zap.NewProductionConfig()
 	} else {
-		return zap.NewDevelopmentConfig()
+		cfg = zap.NewDevelopmentConfig()
 	}
+	cfg.EncoderConfig.TimeKey = "timestamp"
+	cfg.EncoderConfig.LevelKey = "level"
+	cfg.EncoderConfig.MessageKey = "message"
+	cfg.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	return cfg
 }
 
 func (l *Logger) Debug(msg string, fields ...Field) {
