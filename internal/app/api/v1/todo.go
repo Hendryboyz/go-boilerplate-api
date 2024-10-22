@@ -1,8 +1,8 @@
 package v1
 
 import (
-	"go-boilerplate-api/db"
-	"go-boilerplate-api/internal/todo"
+	"go-boilerplate-api/internal/app/todo"
+	"go-boilerplate-api/internal/pkg/db"
 
 	"github.com/gin-gonic/gin"
 )

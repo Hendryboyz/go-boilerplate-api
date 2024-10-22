@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"go-boilerplate-api/db"
+	"go-boilerplate-api/internal/pkg/db"
 
 	"github.com/gin-gonic/gin"
 )

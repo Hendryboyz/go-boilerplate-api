@@ -5,8 +5,8 @@ package cmd
 
 import (
 	"fmt"
-	"go-boilerplate-api/db"
-	v1 "go-boilerplate-api/internal/api/v1"
+	v1 "go-boilerplate-api/internal/app/api/v1"
+	"go-boilerplate-api/internal/pkg/db"
 	"log"
 	"net/http"
 

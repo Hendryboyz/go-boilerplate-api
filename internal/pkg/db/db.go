@@ -28,6 +28,10 @@ func NewDatabase() (*Database, error) {
 	maxConnection := viper.GetInt("db.maxConnection")
 	sqlDb.SetMaxOpenConns(maxConnection)
 
+	if enableAutoMigration := viper.GetBool("db.autoMigration"); enableAutoMigration == true {
+		fmt.Println("auto migrate db")
+	}
+
 	return &Database{
 		Client: db,
 	}, nil

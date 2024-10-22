@@ -1,6 +1,6 @@
 package todo
 
-import "go-boilerplate-api/db"
+import "go-boilerplate-api/internal/pkg/db"
 
 type TodoService interface {
 	GetItem(id string)
