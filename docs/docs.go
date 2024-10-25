@@ -29,8 +29,8 @@ const docTemplate = `{
                 ],
                 "summary": "ping example",
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "type": "string"
                         }
@@ -49,6 +49,17 @@ const docTemplate = `{
                     "todos"
                 ],
                 "summary": "ping example",
+                "parameters": [
+                    {
+                        "description": "Create Todo Item",
+                        "name": "todoItem",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.TodoCreatedRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Created",
@@ -105,7 +116,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "7ae9c676-fc23-47a2-abc1-591ad2859b67",
+                        "example": "7d105cc8-a709-4a28-ae96-f0270bc5ad20",
+                        "description": "the item id to be deleted",
                         "name": "itemId",
                         "in": "path",
                         "required": true
@@ -118,6 +130,26 @@ const docTemplate = `{
                             "type": "string"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.TodoCreatedRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "format": "string",
+                    "example": "say hello to everyone"
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "startDate": {
+                    "type": "string",
+                    "format": "string"
                 }
             }
         }

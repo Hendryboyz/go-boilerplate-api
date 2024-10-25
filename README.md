@@ -13,7 +13,7 @@
 5. [zap - Logging](https://github.com/uber-go/zap): logging tool
 6. [Testify - Testing](https://github.com/stretchr/testify): assertion and mocking framework
 7. [swag - OpenAPI](https://github.com/swaggo/gin-swagger): generate swagger document
-   * [swag](https://github.com/swaggo/swag?tab=readme-ov-file#getting-started): cli tool to generate open api standard json file
+   * [How to comment API document to generate document](https://github.com/swaggo/swag?tab=readme-ov-file#general-api-info)
 
 :bulb: the order to `go get` those packages matters
 
@@ -47,7 +47,11 @@ docker rm $(docker container ls --filter "ancestor=my-golang-webapp" -aq | head 
 ### Build open api document
 
 ```bash
+# generate swagger json and yaml automatically
+swag init
 
+# format swagger comment
+swag fmt
 ```
 
 ## Notes

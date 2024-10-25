@@ -1,3 +1,17 @@
+definitions:
+  dto.TodoCreatedRequest:
+    properties:
+      description:
+        example: say hello to everyone
+        format: string
+        type: string
+      endDate:
+        format: string
+        type: string
+      startDate:
+        format: string
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -9,8 +23,8 @@ paths:
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
             type: string
       summary: ping example
@@ -20,6 +34,13 @@ paths:
       consumes:
       - application/json
       description: do ping
+      parameters:
+      - description: Create Todo Item
+        in: body
+        name: todoItem
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TodoCreatedRequest'
       produces:
       - application/json
       responses:
@@ -36,7 +57,8 @@ paths:
       - application/json
       description: do ping
       parameters:
-      - description: 7ae9c676-fc23-47a2-abc1-591ad2859b67
+      - description: the item id to be deleted
+        example: 7d105cc8-a709-4a28-ae96-f0270bc5ad20
         in: path
         name: itemId
         required: true
