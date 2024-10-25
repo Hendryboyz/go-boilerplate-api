@@ -1,0 +1,74 @@
+info:
+  contact: {}
+paths:
+  /todos:
+    get:
+      consumes:
+      - application/json
+      description: do ping
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+      summary: ping example
+      tags:
+      - todos
+    post:
+      consumes:
+      - application/json
+      description: do ping
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+      summary: ping example
+      tags:
+      - todos
+  /todos/{itemId}:
+    delete:
+      consumes:
+      - application/json
+      description: do ping
+      parameters:
+      - description: 7ae9c676-fc23-47a2-abc1-591ad2859b67
+        in: path
+        name: itemId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+      summary: ping example
+      tags:
+      - todos
+    get:
+      consumes:
+      - application/json
+      description: do ping
+      parameters:
+      - description: 7ae9c676-fc23-47a2-abc1-591ad2859b67
+        in: path
+        name: itemId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+      summary: ping example
+      tags:
+      - todos
+swagger: "2.0"

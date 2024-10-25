@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"fmt"
+	"go-boilerplate-api/docs"
 	v1 "go-boilerplate-api/internal/app/api/v1"
 	"go-boilerplate-api/internal/pkg/db"
 	"go-boilerplate-api/internal/pkg/log"
@@ -13,6 +14,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // serverCmd represents the server command
@@ -61,12 +64,20 @@ func startServer(cmd *cobra.Command, args []string) {
 		log.Sync()
 	}()
 
-	server.GET("/health", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{"status": "OK"})
-	})
+	docs.SwaggerInfo.Title = "Todo List API API"
+	docs.SwaggerInfo.Description = "This API server for a todo app."
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.BasePath = "/v1"
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	apiV1Router := server.Group("/v1")
 	v1.RegisterRouterApiV1(apiV1Router, db)
+
+	server.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
+	server.GET("/health", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{"status": "OK"})
+	})
 
 	port := viper.GetInt32("server.port")
 	startEndpoint := fmt.Sprintf("localhost:%d", port)

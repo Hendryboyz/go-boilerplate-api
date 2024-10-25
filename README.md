@@ -12,6 +12,8 @@
 4. [GORM - ORM](https://gorm.io/gorm): abstract different type of relational database
 5. [zap - Logging](https://github.com/uber-go/zap): logging tool
 6. [Testify - Testing](https://github.com/stretchr/testify): assertion and mocking framework
+7. [swag - OpenAPI](https://github.com/swaggo/gin-swagger): generate swagger document
+   * [swag](https://github.com/swaggo/swag?tab=readme-ov-file#getting-started): cli tool to generate open api standard json file
 
 :bulb: the order to `go get` those packages matters
 
@@ -40,6 +42,12 @@ docker run --env GIN_MODE=release \
    -p 8081:8081 \
    my-golang-webapp:latest
 docker rm $(docker container ls --filter "ancestor=my-golang-webapp" -aq | head -n 1)
+```
+
+### Build open api document
+
+```bash
+
 ```
 
 ## Notes
