@@ -10,8 +10,8 @@ import (
 func SetTodoRoutes(router *gin.RouterGroup, db *db.Database) {
 	controller := todo.ConstructController(db)
 
-	router.POST("", controller.Create)
+	router.POST("", controller.CreateItem)
 	router.GET("", controller.FindAll)
-	router.GET(":id", controller.GetItem)
-	router.DELETE(":id", controller.Delete)
+	router.GET(":itemId", controller.GetItem)
+	router.DELETE(":itemId", controller.DeleteItem)
 }
