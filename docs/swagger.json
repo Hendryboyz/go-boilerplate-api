@@ -6,17 +6,14 @@
     "paths": {
         "/todos": {
             "get": {
-                "description": "do ping",
-                "consumes": [
-                    "application/json"
-                ],
+                "description": "List All Todo Items",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "todos"
                 ],
-                "summary": "ping example",
+                "summary": "List All Todo Items",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -27,7 +24,7 @@
                 }
             },
             "post": {
-                "description": "do ping",
+                "description": "CreateItem Todo Item",
                 "consumes": [
                     "application/json"
                 ],
@@ -37,15 +34,15 @@
                 "tags": [
                     "todos"
                 ],
-                "summary": "ping example",
+                "summary": "CreateItem Todo Item",
                 "parameters": [
                     {
-                        "description": "Create Todo Item",
+                        "description": "CreateItem Todo Item",
                         "name": "todoItem",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.TodoCreatedRequest"
+                            "$ref": "#/definitions/dto.CreateTodoRequest"
                         }
                     }
                 ],
@@ -71,19 +68,20 @@
                 "tags": [
                     "todos"
                 ],
-                "summary": "ping example",
+                "summary": "Get Todo Item By Id",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "7ae9c676-fc23-47a2-abc1-591ad2859b67",
+                        "example": "7ae9c676-fc23-47a2-abc1-591ad2859b67",
+                        "description": "get item by id",
                         "name": "itemId",
                         "in": "path",
                         "required": true
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "type": "string"
                         }
@@ -91,17 +89,14 @@
                 }
             },
             "delete": {
-                "description": "do ping",
-                "consumes": [
-                    "application/json"
-                ],
+                "description": "DeleteItem Todo Item",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "todos"
                 ],
-                "summary": "ping example",
+                "summary": "DeleteItem Todo Item",
                 "parameters": [
                     {
                         "type": "string",
@@ -113,8 +108,48 @@
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "UpdateItem Todo Item",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "todos"
+                ],
+                "summary": "UpdateItem Todo Item",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "7d105cc8-a709-4a28-ae96-f0270bc5ad20",
+                        "description": "the item id to be updated",
+                        "name": "itemId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "UpdateItem Todo Item",
+                        "name": "todoItem",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateTodoRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "type": "string"
                         }
@@ -124,7 +159,25 @@
         }
     },
     "definitions": {
-        "dto.TodoCreatedRequest": {
+        "dto.CreateTodoRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "format": "string",
+                    "example": "say hello to everyone"
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "string"
+                },
+                "startDate": {
+                    "type": "string",
+                    "format": "string"
+                }
+            }
+        },
+        "dto.UpdateTodoRequest": {
             "type": "object",
             "properties": {
                 "description": {

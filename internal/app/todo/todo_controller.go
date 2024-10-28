@@ -15,7 +15,7 @@ type TodoController interface {
 	DeleteItem(*gin.Context)
 }
 
-// @BasePath	/v1
+//	@BasePath	/v1
 type todoController struct {
 	service TodoService
 }
@@ -31,7 +31,7 @@ func ConstructController(db *db.Database) TodoController {
 //	@Tags			todos
 //	@Accept			json
 //	@Produce		json
-//	@Success		201			{string}	CreateItem						todo	item
+//	@Success		201			{string}	CreateItem					todo	item
 //	@Param			todoItem	body		todoDto.CreateTodoRequest	true	"CreateItem Todo Item"
 //	@Router			/todos [post]
 func (t *todoController) CreateItem(ctx *gin.Context) {
@@ -75,8 +75,8 @@ func (t *todoController) GetItem(ctx *gin.Context) {
 //	@Tags			todos
 //	@Accept			json
 //	@Produce		json
-//	@Success		200		{string}	UpdateItem	todo	item
-//	@Param			itemId	path		string	true	"the item id to be updated"	example(7d105cc8-a709-4a28-ae96-f0270bc5ad20)
+//	@Success		200			{string}	UpdateItem					todo	item
+//	@Param			itemId		path		string						true	"the item id to be updated"	example(7d105cc8-a709-4a28-ae96-f0270bc5ad20)
 //	@Param			todoItem	body		todoDto.UpdateTodoRequest	true	"UpdateItem Todo Item"
 //	@Router			/todos/{itemId} [patch]
 func (t *todoController) UpdateItem(ctx *gin.Context) {
@@ -93,7 +93,7 @@ func (t *todoController) UpdateItem(ctx *gin.Context) {
 //	@Tags			todos
 //	@Produce		json
 //	@Success		204		{string}	DeleteItem	todo	item
-//	@Param			itemId	path		string	true	"the item id to be deleted"	example(7d105cc8-a709-4a28-ae96-f0270bc5ad20)
+//	@Param			itemId	path		string		true	"the item id to be deleted"	example(7d105cc8-a709-4a28-ae96-f0270bc5ad20)
 //	@Router			/todos/{itemId} [delete]
 func (t *todoController) DeleteItem(ctx *gin.Context) {
 	itemId := ctx.Param("itemId")

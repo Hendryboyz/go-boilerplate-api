@@ -1,5 +1,18 @@
 definitions:
-  dto.TodoCreatedRequest:
+  dto.CreateTodoRequest:
+    properties:
+      description:
+        example: say hello to everyone
+        format: string
+        type: string
+      endDate:
+        format: string
+        type: string
+      startDate:
+        format: string
+        type: string
+    type: object
+  dto.UpdateTodoRequest:
     properties:
       description:
         example: say hello to everyone
@@ -17,9 +30,7 @@ info:
 paths:
   /todos:
     get:
-      consumes:
-      - application/json
-      description: do ping
+      description: List All Todo Items
       produces:
       - application/json
       responses:
@@ -27,20 +38,20 @@ paths:
           description: OK
           schema:
             type: string
-      summary: ping example
+      summary: List All Todo Items
       tags:
       - todos
     post:
       consumes:
       - application/json
-      description: do ping
+      description: CreateItem Todo Item
       parameters:
-      - description: Create Todo Item
+      - description: CreateItem Todo Item
         in: body
         name: todoItem
         required: true
         schema:
-          $ref: '#/definitions/dto.TodoCreatedRequest'
+          $ref: '#/definitions/dto.CreateTodoRequest'
       produces:
       - application/json
       responses:
@@ -48,14 +59,12 @@ paths:
           description: Created
           schema:
             type: string
-      summary: ping example
+      summary: CreateItem Todo Item
       tags:
       - todos
   /todos/{itemId}:
     delete:
-      consumes:
-      - application/json
-      description: do ping
+      description: DeleteItem Todo Item
       parameters:
       - description: the item id to be deleted
         example: 7d105cc8-a709-4a28-ae96-f0270bc5ad20
@@ -66,11 +75,11 @@ paths:
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "204":
+          description: No Content
           schema:
             type: string
-      summary: ping example
+      summary: DeleteItem Todo Item
       tags:
       - todos
     get:
@@ -78,7 +87,8 @@ paths:
       - application/json
       description: do ping
       parameters:
-      - description: 7ae9c676-fc23-47a2-abc1-591ad2859b67
+      - description: get item by id
+        example: 7ae9c676-fc23-47a2-abc1-591ad2859b67
         in: path
         name: itemId
         required: true
@@ -86,11 +96,38 @@ paths:
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
             type: string
-      summary: ping example
+      summary: Get Todo Item By Id
+      tags:
+      - todos
+    patch:
+      consumes:
+      - application/json
+      description: UpdateItem Todo Item
+      parameters:
+      - description: the item id to be updated
+        example: 7d105cc8-a709-4a28-ae96-f0270bc5ad20
+        in: path
+        name: itemId
+        required: true
+        type: string
+      - description: UpdateItem Todo Item
+        in: body
+        name: todoItem
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateTodoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: UpdateItem Todo Item
       tags:
       - todos
 swagger: "2.0"
