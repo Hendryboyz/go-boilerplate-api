@@ -112,6 +112,10 @@ func New(writer io.Writer, level Level) *Logger {
 	}
 
 	cfg := newLoggerConfig()
+	mode := os.Getenv("GIN_MODE")
+	if mode != "release" {
+		level = DebugLevel
+	}
 	core := zapcore.NewCore(
 		zapcore.NewJSONEncoder(cfg.EncoderConfig),
 		zapcore.AddSync(writer),
