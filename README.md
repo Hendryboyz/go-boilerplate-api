@@ -54,6 +54,10 @@ swag init -o api
 swag fmt
 ```
 
+## Nice to do
+
+* user [`gin-contrib/zap`](https://github.com/gin-contrib/zap) replace native `go.uber.org/zap`
+
 ## Notes
 
 * Fix go.mod with `go mod tidy` command
