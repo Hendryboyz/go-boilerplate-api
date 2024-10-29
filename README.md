@@ -48,7 +48,7 @@ docker rm $(docker container ls --filter "ancestor=my-golang-webapp" -aq | head 
 
 ```bash
 # generate swagger json and yaml automatically
-swag init
+swag init -o api
 
 # format swagger comment
 swag fmt

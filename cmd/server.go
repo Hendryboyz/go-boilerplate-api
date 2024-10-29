@@ -5,7 +5,7 @@ package cmd
 
 import (
 	"fmt"
-	"go-boilerplate-api/docs"
+	"go-boilerplate-api/api"
 	v1 "go-boilerplate-api/internal/app/api/v1"
 	"go-boilerplate-api/internal/pkg/db"
 	"go-boilerplate-api/internal/pkg/log"
@@ -64,11 +64,11 @@ func startServer(cmd *cobra.Command, args []string) {
 		log.Sync()
 	}()
 
-	docs.SwaggerInfo.Title = "Todo List API API"
-	docs.SwaggerInfo.Description = "This API server for a todo app."
-	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.BasePath = "/v1"
-	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+	api.SwaggerInfo.Title = "Todo List API API"
+	api.SwaggerInfo.Description = "This API server for a todo app."
+	api.SwaggerInfo.Version = "1.0"
+	api.SwaggerInfo.BasePath = "/v1"
+	api.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	apiV1Router := server.Group("/v1")
 	v1.RegisterRouterApiV1(apiV1Router, db)
