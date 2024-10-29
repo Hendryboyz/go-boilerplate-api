@@ -1,14 +1,14 @@
 package dto
 
 import (
-	"go-boilerplate-api/internal/pkg/utils"
+	"go-boilerplate-api/internal/model"
 	"time"
 )
 
 type CreateTodoRequest struct {
 	Description string          `json:"description" format:"string" example:"say hello to everyone"`
-	StartDate   *utils.DateTime `json:"startDate" format:"dateTime" time_format:"2024-01-01 00:00:00"`
-	EndDate     *utils.DateTime `json:"endDate" format:"dateTime" time_format:"2024-01-01 00:00:00"`
+	StartDate   *model.DateTime `json:"startDate" format:"dateTime" time_format:"2024-01-01 00:00:00"`
+	EndDate     *model.DateTime `json:"endDate" format:"dateTime" time_format:"2024-01-01 00:00:00"`
 }
 
 type UpdateTodoRequest struct {
