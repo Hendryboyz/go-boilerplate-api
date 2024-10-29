@@ -6,10 +6,10 @@ definitions:
         format: string
         type: string
       endDate:
-        format: string
+        format: dateTime
         type: string
       startDate:
-        format: string
+        format: dateTime
         type: string
     type: object
   dto.UpdateTodoRequest:
@@ -19,10 +19,10 @@ definitions:
         format: string
         type: string
       endDate:
-        format: string
+        format: dateTime
         type: string
       startDate:
-        format: string
+        format: dateTime
         type: string
     type: object
 info:
@@ -31,6 +31,13 @@ paths:
   /todos:
     get:
       description: List All Todo Items
+      parameters:
+      - description: the user id to filter
+        example: henry.chou
+        in: query
+        name: userId
+        required: true
+        type: string
       produces:
       - application/json
       responses:

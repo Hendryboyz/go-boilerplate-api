@@ -2,7 +2,10 @@ package todo
 
 import (
 	todoDto "go-boilerplate-api/internal/app/todo/dto"
+	todoEntity "go-boilerplate-api/internal/app/todo/entities"
 	"go-boilerplate-api/internal/pkg/db"
+	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +18,7 @@ type TodoController interface {
 	DeleteItem(*gin.Context)
 }
 
-//	@BasePath	/v1
+// @BasePath	/v1
 type todoController struct {
 	service TodoService
 }
@@ -37,7 +40,26 @@ func ConstructController(db *db.Database) TodoController {
 func (t *todoController) CreateItem(ctx *gin.Context) {
 	var creatingItem todoDto.CreateTodoRequest
 	if err := ctx.ShouldBindJSON(&creatingItem); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
+	}
+
+	entity := convertToEntity(creatingItem)
+	createdItem, err := t.service.Create(entity)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, createdItem)
+}
+
+func convertToEntity(dto todoDto.CreateTodoRequest) *todoEntity.Todo {
+	return &todoEntity.Todo{
+		UserId:      "henry.chou",
+		Description: dto.Description,
+		StartDate:   time.Time(*dto.StartDate),
+		EndDate:     time.Time(*dto.EndDate),
 	}
 }
 
@@ -47,10 +69,21 @@ func (t *todoController) CreateItem(ctx *gin.Context) {
 //	@Description	List All Todo Items
 //	@Tags			todos
 //	@Produce		json
+//	@Param			userId	query		string	true	"the user id to filter"	example(henry.chou)
 //	@Success		200	{string}	FindAll	todo	item
 //	@Router			/todos [get]
 func (t *todoController) FindAll(ctx *gin.Context) {
-	t.service.List()
+	userId := ctx.Query("userId")
+	if userId == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "userId is required"})
+		return
+	}
+	items, err := t.service.List(userId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+	} else {
+		ctx.JSON(http.StatusOK, items)
+	}
 }
 
 // Todo Api godoc

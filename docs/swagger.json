@@ -14,6 +14,16 @@
                     "todos"
                 ],
                 "summary": "List All Todo Items",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "henry.chou",
+                        "description": "the user id to filter",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -169,11 +179,11 @@
                 },
                 "endDate": {
                     "type": "string",
-                    "format": "string"
+                    "format": "dateTime"
                 },
                 "startDate": {
                     "type": "string",
-                    "format": "string"
+                    "format": "dateTime"
                 }
             }
         },
@@ -187,11 +197,11 @@
                 },
                 "endDate": {
                     "type": "string",
-                    "format": "string"
+                    "format": "dateTime"
                 },
                 "startDate": {
                     "type": "string",
-                    "format": "string"
+                    "format": "dateTime"
                 }
             }
         }

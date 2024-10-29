@@ -25,6 +25,16 @@ const docTemplate = `{
                     "todos"
                 ],
                 "summary": "List All Todo Items",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "henry.chou",
+                        "description": "the user id to filter",
+                        "name": "userId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -180,11 +190,11 @@ const docTemplate = `{
                 },
                 "endDate": {
                     "type": "string",
-                    "format": "string"
+                    "format": "dateTime"
                 },
                 "startDate": {
                     "type": "string",
-                    "format": "string"
+                    "format": "dateTime"
                 }
             }
         },
@@ -198,11 +208,11 @@ const docTemplate = `{
                 },
                 "endDate": {
                     "type": "string",
-                    "format": "string"
+                    "format": "dateTime"
                 },
                 "startDate": {
                     "type": "string",
-                    "format": "string"
+                    "format": "dateTime"
                 }
             }
         }
