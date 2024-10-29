@@ -11,6 +11,7 @@ import (
 	"go-boilerplate-api/internal/pkg/log"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -64,11 +65,8 @@ func startServer(cmd *cobra.Command, args []string) {
 		log.Sync()
 	}()
 
-	api.SwaggerInfo.Title = "Todo List API API"
-	api.SwaggerInfo.Description = "This API server for a todo app."
-	api.SwaggerInfo.Version = "1.0"
-	api.SwaggerInfo.BasePath = "/v1"
-	api.SwaggerInfo.Schemes = []string{"http", "https"}
+	setSwagger()
+	setCORS(server)
 
 	apiV1Router := server.Group("/v1")
 	v1.RegisterRouterApiV1(apiV1Router, db)
@@ -83,4 +81,22 @@ func startServer(cmd *cobra.Command, args []string) {
 	startEndpoint := fmt.Sprintf("localhost:%d", port)
 	log.Info(fmt.Sprintf("server start at %s", startEndpoint))
 	server.Run(startEndpoint)
+}
+
+func setSwagger() {
+	api.SwaggerInfo.Title = "Todo List API API"
+	api.SwaggerInfo.Description = "This API server for a todo app."
+	api.SwaggerInfo.Version = "1.0"
+	api.SwaggerInfo.BasePath = "/v1"
+	api.SwaggerInfo.Schemes = []string{"http", "https"}
+}
+
+func setCORS(server *gin.Engine) {
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{
+		"http://localhost",
+		"http://google.com",
+	}
+	// config.AllowAllOrigins = true
+	server.Use(cors.New(config))
 }
