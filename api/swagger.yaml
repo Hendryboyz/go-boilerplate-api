@@ -11,6 +11,10 @@ definitions:
       startDate:
         format: dateTime
         type: string
+    required:
+    - description
+    - endDate
+    - startDate
     type: object
   dto.UpdateTodoRequest:
     properties:
@@ -24,6 +28,10 @@ definitions:
       startDate:
         format: dateTime
         type: string
+    required:
+    - description
+    - endDate
+    - startDate
     type: object
 info:
   contact: {}

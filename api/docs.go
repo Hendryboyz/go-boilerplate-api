@@ -182,6 +182,11 @@ const docTemplate = `{
     "definitions": {
         "dto.CreateTodoRequest": {
             "type": "object",
+            "required": [
+                "description",
+                "endDate",
+                "startDate"
+            ],
             "properties": {
                 "description": {
                     "type": "string",
@@ -200,6 +205,11 @@ const docTemplate = `{
         },
         "dto.UpdateTodoRequest": {
             "type": "object",
+            "required": [
+                "description",
+                "endDate",
+                "startDate"
+            ],
             "properties": {
                 "description": {
                     "type": "string",

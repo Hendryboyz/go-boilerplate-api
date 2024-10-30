@@ -171,6 +171,11 @@
     "definitions": {
         "dto.CreateTodoRequest": {
             "type": "object",
+            "required": [
+                "description",
+                "endDate",
+                "startDate"
+            ],
             "properties": {
                 "description": {
                     "type": "string",
@@ -189,6 +194,11 @@
         },
         "dto.UpdateTodoRequest": {
             "type": "object",
+            "required": [
+                "description",
+                "endDate",
+                "startDate"
+            ],
             "properties": {
                 "description": {
                     "type": "string",
