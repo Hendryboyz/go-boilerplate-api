@@ -1,5 +1,5 @@
 definitions:
-  dto.CreateTodoRequest:
+  todo.CreateTodoRequest:
     properties:
       description:
         example: say hello to everyone
@@ -16,7 +16,7 @@ definitions:
     - endDate
     - startDate
     type: object
-  dto.UpdateTodoRequest:
+  todo.UpdateTodoRequest:
     properties:
       description:
         example: say hello to everyone
@@ -28,10 +28,6 @@ definitions:
       startDate:
         format: dateTime
         type: string
-    required:
-    - description
-    - endDate
-    - startDate
     type: object
 info:
   contact: {}
@@ -66,7 +62,7 @@ paths:
         name: todoItem
         required: true
         schema:
-          $ref: '#/definitions/dto.CreateTodoRequest'
+          $ref: '#/definitions/todo.CreateTodoRequest'
       produces:
       - application/json
       responses:
@@ -134,7 +130,7 @@ paths:
         name: todoItem
         required: true
         schema:
-          $ref: '#/definitions/dto.UpdateTodoRequest'
+          $ref: '#/definitions/todo.UpdateTodoRequest'
       produces:
       - application/json
       responses:

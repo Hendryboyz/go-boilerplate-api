@@ -52,7 +52,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.CreateTodoRequest"
+                            "$ref": "#/definitions/todo.CreateTodoRequest"
                         }
                     }
                 ],
@@ -153,7 +153,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdateTodoRequest"
+                            "$ref": "#/definitions/todo.UpdateTodoRequest"
                         }
                     }
                 ],
@@ -169,7 +169,7 @@
         }
     },
     "definitions": {
-        "dto.CreateTodoRequest": {
+        "todo.CreateTodoRequest": {
             "type": "object",
             "required": [
                 "description",
@@ -192,13 +192,8 @@
                 }
             }
         },
-        "dto.UpdateTodoRequest": {
+        "todo.UpdateTodoRequest": {
             "type": "object",
-            "required": [
-                "description",
-                "endDate",
-                "startDate"
-            ],
             "properties": {
                 "description": {
                     "type": "string",

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"go-boilerplate-api/internal/pkg/log"
 	"io"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,7 +20,7 @@ func SetRequestLogger() gin.HandlerFunc {
 		}
 		fields := []log.Field{}
 
-		if method == http.MethodPost && ctx.Request.Body != nil {
+		if ctx.Request.Body != nil {
 			var buf bytes.Buffer
 			tee := io.TeeReader(ctx.Request.Body, &buf)
 			bodyBytes, _ := io.ReadAll(tee)

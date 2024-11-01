@@ -2,7 +2,8 @@ package todo
 
 import (
 	"errors"
-	todoEntity "go-boilerplate-api/internal/app/todo/entities"
+	"fmt"
+	"go-boilerplate-api/internal/model"
 	"go-boilerplate-api/internal/pkg/db"
 	"go-boilerplate-api/internal/pkg/log"
 
@@ -10,11 +11,11 @@ import (
 )
 
 type TodoService interface {
-	Create(todo *todoEntity.Todo) (*todoEntity.Todo, error)
-	Update(id string, todo *todoEntity.Todo) error
-	List(userId string) ([]*todoEntity.Todo, error)
-	Get(id string) (*todoEntity.Todo, error)
-	Delete(id string) error
+	Create(userId string, todo *model.Todo) (*model.Todo, error)
+	List(userId string) ([]*model.Todo, error)
+	Get(userId string, itemId string) (*model.Todo, error)
+	Update(userId string, todo *model.Todo) (*model.Todo, error)
+	Delete(userId string, itemId string) error
 }
 
 type todoService struct {
@@ -25,13 +26,13 @@ func ConstructService(db *db.Database) TodoService {
 	return &todoService{database: db}
 }
 
-func (t *todoService) Create(todo *todoEntity.Todo) (*todoEntity.Todo, error) {
+func (t *todoService) Create(userId string, todo *model.Todo) (*model.Todo, error) {
 	if todo == nil {
 		message := "todo cannot be nil"
 		log.Error(message)
 		return nil, errors.New(message)
 	}
-
+	todo.UserId = userId
 	result := t.database.Client.Create(&todo)
 	if result.Error != nil {
 		return nil, result.Error
@@ -39,8 +40,8 @@ func (t *todoService) Create(todo *todoEntity.Todo) (*todoEntity.Todo, error) {
 	return todo, nil
 }
 
-func (t *todoService) List(userId string) ([]*todoEntity.Todo, error) {
-	items := []*todoEntity.Todo{}
+func (t *todoService) List(userId string) ([]*model.Todo, error) {
+	items := []*model.Todo{}
 	if userId == "" {
 		return items, errors.New("userId is required to list todo items")
 	}
@@ -50,21 +51,42 @@ func (t *todoService) List(userId string) ([]*todoEntity.Todo, error) {
 	return items, nil
 }
 
-func (t *todoService) Get(id string) (*todoEntity.Todo, error) {
-	var item *todoEntity.Todo
-	uuid, err := uuid.Parse(id)
+func (t *todoService) Get(userId string, itemId string) (*model.Todo, error) {
+	var item *model.Todo
+	uuid, err := uuid.Parse(itemId)
 	if err != nil {
 		return item, err
 	}
 
-	err = t.database.Client.First(&item, "id = ?", uuid).Error
+	err = t.database.Client.First(&item, "user_id = ? AND id = ?", userId, uuid).Error
 	return item, err
 }
 
-func (t *todoService) Update(id string, todo *todoEntity.Todo) error {
-	return nil
+func (t *todoService) Update(userId string, todo *model.Todo) (*model.Todo, error) {
+	selectedFields := []string{}
+	if todo.Description != "" {
+		selectedFields = append(selectedFields, "description")
+	}
+	if todo.StartDate != nil {
+		selectedFields = append(selectedFields, "start_date")
+	}
+	if todo.EndDate != nil {
+		selectedFields = append(selectedFields, "end_date")
+	}
+	tx := t.database.Client.Model(&todo).Where("id = ? AND user_id = ?", todo.ID, userId).Select(selectedFields).Updates(todo)
+	if err := tx.Error; err != nil {
+		return nil, err
+	} else {
+		return todo, nil
+	}
 }
 
-func (t *todoService) Delete(description string) error {
-	return nil
+func (t *todoService) Delete(userId string, itemId string) error {
+	err := t.database.Client.Where("user_id = ? AND id = ?", userId, itemId).Delete(&model.Todo{}).Error
+	if err != nil {
+		log.Error(fmt.Sprintf("fail to delete todo item[%s] for user[%s]", itemId, userId))
+		return err
+	} else {
+		return nil
+	}
 }

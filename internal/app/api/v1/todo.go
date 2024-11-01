@@ -13,5 +13,6 @@ func SetTodoRoutes(router *gin.RouterGroup, db *db.Database) {
 	router.POST("", controller.CreateItem)
 	router.GET("", controller.FindAll)
 	router.GET(":itemId", controller.GetItem)
+	router.PATCH(":itemId", controller.UpdateItem)
 	router.DELETE(":itemId", controller.DeleteItem)
 }

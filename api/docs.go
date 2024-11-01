@@ -63,7 +63,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.CreateTodoRequest"
+                            "$ref": "#/definitions/todo.CreateTodoRequest"
                         }
                     }
                 ],
@@ -164,7 +164,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dto.UpdateTodoRequest"
+                            "$ref": "#/definitions/todo.UpdateTodoRequest"
                         }
                     }
                 ],
@@ -180,7 +180,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "dto.CreateTodoRequest": {
+        "todo.CreateTodoRequest": {
             "type": "object",
             "required": [
                 "description",
@@ -203,13 +203,8 @@ const docTemplate = `{
                 }
             }
         },
-        "dto.UpdateTodoRequest": {
+        "todo.UpdateTodoRequest": {
             "type": "object",
-            "required": [
-                "description",
-                "endDate",
-                "startDate"
-            ],
             "properties": {
                 "description": {
                     "type": "string",

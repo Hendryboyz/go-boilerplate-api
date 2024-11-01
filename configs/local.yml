@@ -1,6 +1,7 @@
 server:
   port: 8081
   environment: local
+  defaultUser: henry.chou
 db:
   dsn: postgresql://henry_chou:admin1337tw@localhost:5432/my-demo-db?sslmode=disable
   maxConnection: 50

@@ -1,8 +1,7 @@
-package dto
+package todo
 
 import (
 	"go-boilerplate-api/internal/model"
-	"time"
 )
 
 type CreateTodoRequest struct {
@@ -12,7 +11,7 @@ type CreateTodoRequest struct {
 }
 
 type UpdateTodoRequest struct {
-	Description string    `json:"description" format:"string" example:"say hello to everyone" binding:"omitempty"`
-	StartDate   time.Time `json:"startDate" format:"dateTime" binding:"omitempty"`
-	EndDate     time.Time `json:"endDate" format:"dateTime" binding:"omitempty"`
+	Description string          `json:"description" format:"string" example:"say hello to everyone" binding:"omitempty"`
+	StartDate   *model.DateTime `json:"startDate" format:"dateTime" binding:"omitempty"`
+	EndDate     *model.DateTime `json:"endDate" format:"dateTime" binding:"omitempty"`
 }
