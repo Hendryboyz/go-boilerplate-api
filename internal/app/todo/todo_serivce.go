@@ -63,17 +63,22 @@ func (t *todoService) Get(userId string, itemId string) (*model.Todo, error) {
 }
 
 func (t *todoService) Update(userId string, todo *model.Todo) (*model.Todo, error) {
-	selectedFields := []string{}
+	existingTodo := &model.Todo{}
+	if err := t.database.Client.First(&existingTodo, "id = ? AND user_id = ?", todo.ID, userId).Error; err != nil {
+		return nil, err
+	}
+
+	updatesFields := map[string]any{}
 	if todo.Description != "" {
-		selectedFields = append(selectedFields, "description")
+		updatesFields["description"] = todo.Description
 	}
 	if todo.StartDate != nil {
-		selectedFields = append(selectedFields, "start_date")
+		updatesFields["start_date"] = todo.StartDate
 	}
 	if todo.EndDate != nil {
-		selectedFields = append(selectedFields, "end_date")
+		updatesFields["end_date"] = todo.EndDate
 	}
-	tx := t.database.Client.Model(&todo).Where("id = ? AND user_id = ?", todo.ID, userId).Select(selectedFields).Updates(todo)
+	tx := t.database.Client.Model(&existingTodo).Updates(updatesFields)
 	if err := tx.Error; err != nil {
 		return nil, err
 	} else {
