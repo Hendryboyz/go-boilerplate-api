@@ -14,6 +14,7 @@
 6. [Testify - Testing](https://github.com/stretchr/testify): assertion and mocking framework
 7. [swag - OpenAPI](https://github.com/swaggo/gin-swagger): generate swagger document
    * [How to comment API document to generate document](https://github.com/swaggo/swag?tab=readme-ov-file#general-api-info)
+8. [Resty](https://github.com/go-resty/resty): http client package. much better than `net/http`
 
 :bulb: the order to `go get` those packages matters
 
@@ -53,10 +54,6 @@ swag init -o api
 # format swagger comment
 swag fmt
 ```
-
-## Nice to do
-
-* user [`gin-contrib/zap`](https://github.com/gin-contrib/zap) replace native `go.uber.org/zap`
 
 ## Notes
 
