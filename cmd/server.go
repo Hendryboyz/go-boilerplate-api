@@ -12,6 +12,7 @@ import (
 	"net/http"
 
 	"github.com/gin-contrib/cors"
+	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -64,6 +65,8 @@ func startServer(cmd *cobra.Command, args []string) {
 		}
 		log.Sync()
 	}()
+
+	server.Use(ginzap.RecoveryWithZap(log.Default(), true))
 
 	setSwagger()
 	setCORS(server)
