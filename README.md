@@ -26,7 +26,10 @@
 
 ```bash
 docker-compose up -d
-go run main.go server
+
+# please install `air` first to hot reload while code change
+go install github.com/air-verse/air@latest
+air
 ```
 
 ### Build and Run
