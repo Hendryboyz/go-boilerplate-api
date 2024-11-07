@@ -4,12 +4,17 @@ Copyright © 2024 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"go-boilerplate-api/api"
 	v1 "go-boilerplate-api/internal/app/api/v1"
 	"go-boilerplate-api/internal/pkg/db"
 	"go-boilerplate-api/internal/pkg/log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	ginzap "github.com/gin-contrib/zap"
@@ -51,39 +56,59 @@ func startServer(cmd *cobra.Command, args []string) {
 	// connect database
 	db, err := db.NewDatabase()
 	if err != nil {
-		log.Fatal("Can't connect database")
+		log.Fatal("fail to connect database")
 	}
 
-	server := gin.New()
-
+	ginRouter := gin.Default()
 	defer func() {
 		sqlDB, _ := db.Client.DB()
 		if closingErr := sqlDB.Close(); closingErr != nil {
 			log.Fatal(err.Error())
 		} else {
-			log.Info("Closed db connection")
+			log.Info("db connection closed")
 		}
 		log.Sync()
 	}()
 
-	server.Use(ginzap.RecoveryWithZap(log.Default(), true))
+	ginRouter.Use(ginzap.RecoveryWithZap(log.Default(), true))
 
 	setSwagger()
-	setCORS(server)
+	setCORS(ginRouter)
 
-	apiV1Router := server.Group("/v1")
+	apiV1Router := ginRouter.Group("/v1")
 	v1.RegisterRouterApiV1(apiV1Router, db)
 
-	server.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	ginRouter.GET("/docs/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
-	server.GET("/health", func(ctx *gin.Context) {
+	ginRouter.GET("/health", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"status": "OK"})
 	})
 
 	port := viper.GetInt32("server.port")
 	startEndpoint := fmt.Sprintf("localhost:%d", port)
-	log.Info(fmt.Sprintf("server start at %s", startEndpoint))
-	server.Run(startEndpoint)
+	server := &http.Server{
+		Addr:    startEndpoint,
+		Handler: ginRouter.Handler(),
+	}
+
+	log.Info(fmt.Sprintf("server starting listen at %s", startEndpoint))
+	go func() {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatal(fmt.Sprintf("server failed to listen at %s\n", err))
+		}
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	log.Warn("shutting down gracefully, press Ctrl+C again to force")
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := server.Shutdown(ctx); err != nil {
+		log.Fatal(fmt.Sprintf("server forced to shutdown: %s\n", err))
+	}
+	log.Warn("server exiting")
 }
 
 func setSwagger() {

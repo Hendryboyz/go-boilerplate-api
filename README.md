@@ -15,6 +15,8 @@
 7. [swag - OpenAPI](https://github.com/swaggo/gin-swagger): generate swagger document
    * [How to comment API document to generate document](https://github.com/swaggo/swag?tab=readme-ov-file#general-api-info)
 8. [Resty](https://github.com/go-resty/resty): http client package. much better than `net/http`
+9. [Hot Reload](https://github.com/air-verse/air): auto reload gin app code change to make developer's live easier
+10. [Graceful Shutdown - Github Example](https://github.com/gin-gonic/examples/blob/master/graceful-shutdown/graceful-shutdown/notify-without-context/server.go)
 
 :bulb: the order to `go get` those packages matters
 
