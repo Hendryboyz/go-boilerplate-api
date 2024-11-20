@@ -32,10 +32,10 @@ RUN apk add --no-cache ca-certificates
 WORKDIR /app
 
 # Copy the built binary from the builder stage
-COPY --from=builder /app/bin/api /app/api
+COPY --from=builder /app/bin/api /usr/local/bin/api
 
 # Expose the application's port (adjust based on your app configuration)
 EXPOSE 8081
 
 # Command to run the web app
-ENTRYPOINT ["/app/api", "server"]
+ENTRYPOINT ["api", "server"]
