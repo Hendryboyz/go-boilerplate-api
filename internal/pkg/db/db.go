@@ -2,23 +2,23 @@ package db
 
 import (
 	"fmt"
+	"go-boilerplate-api/global"
 	"go-boilerplate-api/internal/pkg/log"
+	"time"
 
-	"github.com/spf13/viper"
-	"gorm.io/driver/postgres"
+	postgres "go.elastic.co/apm/module/apmgormv2/v2/driver/postgres"
 	"gorm.io/gorm"
 )
 
-type Database struct {
-	Client *gorm.DB
-}
-
-func NewDatabase() (*Database, error) {
-	connectionString := viper.GetString("db.dsn")
-	db, err := gorm.Open(postgres.Open(connectionString))
+func NewRDBMS() *gorm.DB {
+	connectionString := global.App.Config.DB.DSN
+	createBatchSize := global.App.Config.DB.CreateBatchSize
+	db, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{
+		CreateBatchSize: createBatchSize,
+	})
 
 	if err != nil {
-		return &Database{}, fmt.Errorf("db init failed: %w", err)
+		panic(fmt.Errorf("db init failed: %w", err))
 	}
 
 	sqlDb, err := db.DB()
@@ -28,15 +28,9 @@ func NewDatabase() (*Database, error) {
 			log.String("reason", err.Error()),
 		)
 	}
-	maxConnection := viper.GetInt("db.maxConnection")
+	maxConnection := global.App.Config.DB.MaxConnection
 	sqlDb.SetMaxOpenConns(maxConnection)
-
-	if viper.GetBool("db.autoMigration") {
-		log.Warn("auto migrate db")
-		AutoMigrate(db)
-	}
-
-	return &Database{
-		Client: db,
-	}, nil
+	sqlDb.SetMaxIdleConns(maxConnection / 2)
+	sqlDb.SetConnMaxIdleTime(15 * time.Minute)
+	return db
 }

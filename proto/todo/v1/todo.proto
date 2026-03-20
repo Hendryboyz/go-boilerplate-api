@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package todo.v1;
+option go_package = "v1/todo;todo";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+message Todo {
+    string id          = 1;
+    string user_id     = 2;
+    string description = 3;
+    google.protobuf.Timestamp start_date = 4;
+    google.protobuf.Timestamp end_date   = 5;
+    google.protobuf.Timestamp created_at = 6;
+    google.protobuf.Timestamp updated_at = 7;
+}
+
+message CreateTodoRequest {
+    string description               = 1;
+    google.protobuf.Timestamp start_date = 2;
+    google.protobuf.Timestamp end_date   = 3;
+}
+
+message ListTodosRequest {
+    string user_id = 1;
+}
+
+message ListTodosResponse {
+    repeated Todo items = 1;
+}
+
+message GetTodoRequest {
+    string item_id = 1;
+}
+
+message UpdateTodoRequest {
+    string item_id                       = 1;
+    string description                   = 2;
+    google.protobuf.Timestamp start_date = 3;
+    google.protobuf.Timestamp end_date   = 4;
+}
+
+message DeleteTodoRequest {
+    string item_id = 1;
+}
+
+message DeleteTodoResponse {}
+
+message TodoResponse {
+    Todo item = 1;
+}

@@ -1,8 +1,35 @@
 server:
-  port: 8081
+  moduleCode: "06"
+  moduleShortName: "BMGMT"
+  httpPort: 8081
+  grpcPort: 9000
   environment: local
-  defaultUser: henry.chou
+  allowOrigins: http://localhost:5173,http://google.com,https://ecovision-swagger.dev.deltaww-energy.com
+  profiling: false
+session:
+  tokenName: accessToken
 db:
-  dsn: postgresql://henry_chou:admin1337tw@localhost:5432/my-demo-db?sslmode=disable
+  dsn: postgresql://henry_chou:admin1337tw@localhost:5432/my-demo-db
   maxConnection: 50
+  createBatchSize: 50
   autoMigration: false
+cosmos:
+  cosmosDatabaseURL: https://ecovision-cosmos-dev.documents.azure.com:443/
+  cosmosDatabaseKey: 
+redis:
+  url: localhost:6379
+  db: 0
+  poolSize: 10
+  password: ""
+  cachedPrefix: ecovision
+  defaultTTLSecs: 1800
+queue:
+  billQueueName: bill-events
+  serviceBus:
+    hostName: ecovision-local-servicebus.servicebus.windows.net
+    accessKeyName: RootManageSharedAccessKey
+    accessKey: 
+domain:
+  bill:
+    expirationYear: 2023
+    uploadDirectory: ./uploads/bills/

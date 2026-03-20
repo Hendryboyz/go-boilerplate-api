@@ -1,97 +1,56 @@
 package todo
 
 import (
+	"context"
 	"errors"
-	"fmt"
-	"go-boilerplate-api/internal/model"
-	"go-boilerplate-api/internal/pkg/db"
+	"go-boilerplate-api/internal/app/model"
 	"go-boilerplate-api/internal/pkg/log"
 
 	"github.com/google/uuid"
 )
 
-type TodoService interface {
-	Create(userId string, todo *model.Todo) (*model.Todo, error)
-	List(userId string) ([]*model.Todo, error)
-	Get(userId string, itemId string) (*model.Todo, error)
-	Update(userId string, todo *model.Todo) (*model.Todo, error)
-	Delete(userId string, itemId string) error
+type TodoService struct {
+	todoRepository TodoRepository
 }
 
-type todoService struct {
-	database *db.Database
+func NewTodoService(repository TodoRepository) TodoService {
+	return TodoService{todoRepository: repository}
 }
 
-func ConstructService(db *db.Database) TodoService {
-	return &todoService{database: db}
-}
-
-func (t *todoService) Create(userId string, todo *model.Todo) (*model.Todo, error) {
+func (t *TodoService) Create(ctx context.Context, userId string, todo *model.Todo) (*model.Todo, error) {
 	if todo == nil {
 		message := "todo cannot be nil"
 		log.Error(message)
 		return nil, errors.New(message)
 	}
 	todo.UserId = userId
-	result := t.database.Client.Create(&todo)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-	return todo, nil
+	return t.todoRepository.Create(ctx, todo)
 }
 
-func (t *todoService) List(userId string) ([]*model.Todo, error) {
+func (t *TodoService) List(ctx context.Context, userId string) ([]*model.Todo, error) {
 	items := []*model.Todo{}
 	if userId == "" {
 		return items, errors.New("userId is required to list todo items")
 	}
-	if err := t.database.Client.Where("user_id = ?", userId).Find(&items).Error; err != nil {
-		return items, err
-	}
-	return items, nil
+	return t.todoRepository.List(ctx, userId)
 }
 
-func (t *todoService) Get(userId string, itemId string) (*model.Todo, error) {
-	var item *model.Todo
-	uuid, err := uuid.Parse(itemId)
+func (t *TodoService) Get(ctx context.Context, userId string, rawItemId string) (*model.Todo, error) {
+	itemId, err := uuid.Parse(rawItemId)
 	if err != nil {
-		return item, err
-	}
-
-	err = t.database.Client.First(&item, "user_id = ? AND id = ?", userId, uuid).Error
-	return item, err
-}
-
-func (t *todoService) Update(userId string, todo *model.Todo) (*model.Todo, error) {
-	existingTodo := &model.Todo{}
-	if err := t.database.Client.First(&existingTodo, "id = ? AND user_id = ?", todo.ID, userId).Error; err != nil {
 		return nil, err
 	}
-
-	updatesFields := map[string]any{}
-	if todo.Description != "" {
-		updatesFields["description"] = todo.Description
-	}
-	if todo.StartDate != nil {
-		updatesFields["start_date"] = todo.StartDate
-	}
-	if todo.EndDate != nil {
-		updatesFields["end_date"] = todo.EndDate
-	}
-	tx := t.database.Client.Model(&existingTodo).Updates(updatesFields)
-	if err := tx.Error; err != nil {
-		return nil, err
-	} else {
-		return todo, nil
-	}
+	return t.todoRepository.Get(ctx, userId, itemId)
 }
 
-func (t *todoService) Delete(userId string, itemId string) error {
-	err := t.database.Client.Where("user_id = ? AND id = ?", userId, itemId).Delete(&model.Todo{}).Error
+func (t *TodoService) Update(ctx context.Context, userId string, todo *model.Todo) (*model.Todo, error) {
+	return t.todoRepository.Update(ctx, userId, todo)
+}
+
+func (t *TodoService) Delete(ctx context.Context, userId string, rawItemId string) error {
+	itemId, err := uuid.Parse(rawItemId)
 	if err != nil {
-		log.Error(fmt.Sprintf("fail to delete todo item[%s] for user[%s]", itemId, userId))
 		return err
-	} else {
-		return nil
 	}
+	return t.todoRepository.Delete(ctx, userId, itemId)
 }

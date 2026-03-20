@@ -1,0 +1,201 @@
+definitions:
+  dto.CreateTodoRequest:
+    properties:
+      description:
+        example: say hello to everyone
+        format: string
+        type: string
+      endDate:
+        format: dateTime
+        type: string
+      startDate:
+        format: dateTime
+        type: string
+    required:
+    - description
+    - endDate
+    - startDate
+    type: object
+  dto.UpdateTodoRequest:
+    properties:
+      description:
+        example: say hello to everyone
+        format: string
+        type: string
+      endDate:
+        format: dateTime
+        type: string
+      startDate:
+        format: dateTime
+        type: string
+    type: object
+  model.Todo:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      endDate:
+        type: string
+      id:
+        type: string
+      startDate:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /todo:
+    get:
+      description: List all todo items belonging to the specified user
+      parameters:
+      - description: the user id to filter
+        example: henry.chou
+        in: query
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Todo'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: List All Todo Items
+      tags:
+      - todos
+    post:
+      consumes:
+      - application/json
+      description: Create a new todo item for the user
+      parameters:
+      - description: Create Todo Item
+        in: body
+        name: todoItem
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateTodoRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Todo'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create Todo Item
+      tags:
+      - todos
+  /todo/{itemId}:
+    delete:
+      description: Delete a todo item by its ID
+      parameters:
+      - description: todo item id
+        example: 7d105cc8-a709-4a28-ae96-f0270bc5ad20
+        in: path
+        name: itemId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete Todo Item
+      tags:
+      - todos
+    get:
+      consumes:
+      - application/json
+      description: Get a single todo item by its ID
+      parameters:
+      - description: todo item id
+        example: 7ae9c676-fc23-47a2-abc1-591ad2859b67
+        in: path
+        name: itemId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Todo'
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get Todo Item By Id
+      tags:
+      - todos
+    patch:
+      consumes:
+      - application/json
+      description: Update an existing todo item by its ID
+      parameters:
+      - description: todo item id
+        example: 7d105cc8-a709-4a28-ae96-f0270bc5ad20
+        in: path
+        name: itemId
+        required: true
+        type: string
+      - description: Update Todo Item
+        in: body
+        name: todoItem
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateTodoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Todo'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update Todo Item
+      tags:
+      - todos
+swagger: "2.0"

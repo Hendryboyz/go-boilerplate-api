@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package todo.v1;
+option go_package = "v1/todo;todo";
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+import "proto/todo/v1/todo.proto";
+
+service TodoService {
+    rpc CreateTodo(CreateTodoRequest) returns (TodoResponse) {
+        option (google.api.http) = {
+            post: "/v1/todo"
+            body: "*"
+        };
+    }
+
+    rpc ListTodos(ListTodosRequest) returns (ListTodosResponse) {
+        option (google.api.http) = {
+            get: "/v1/todo"
+        };
+    }
+
+    rpc GetTodo(GetTodoRequest) returns (TodoResponse) {
+        option (google.api.http) = {
+            get: "/v1/todo/{item_id}"
+        };
+    }
+
+    rpc UpdateTodo(UpdateTodoRequest) returns (TodoResponse) {
+        option (google.api.http) = {
+            patch: "/v1/todo/{item_id}"
+            body: "*"
+        };
+    }
+
+    rpc DeleteTodo(DeleteTodoRequest) returns (DeleteTodoResponse) {
+        option (google.api.http) = {
+            delete: "/v1/todo/{item_id}"
+        };
+    }
+}
