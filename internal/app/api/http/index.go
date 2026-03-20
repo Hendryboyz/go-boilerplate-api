@@ -82,7 +82,7 @@ func NewApiRouter(
 // const swaggerHost = "ecovision-svc.dev.deltaww-energy.com"
 
 func setSwagger() {
-	docs.SwaggerInfo.Title = "Electricity Bill Management API"
+	docs.SwaggerInfo.Title = "Go Boilerplate API"
 	docs.SwaggerInfo.Description = ""
 	docs.SwaggerInfo.Version = "1.0"
 	// docs.SwaggerInfo.Host = swaggerHost
