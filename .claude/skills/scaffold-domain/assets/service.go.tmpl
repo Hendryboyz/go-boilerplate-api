@@ -1,0 +1,56 @@
+package {{domain}}
+
+import (
+	"context"
+	"errors"
+	"go-boilerplate-api/internal/app/model"
+	"go-boilerplate-api/internal/pkg/log"
+
+	"github.com/google/uuid"
+)
+
+type {{Domain}}Service struct {
+	{{domain}}Repository {{Domain}}Repository
+}
+
+func New{{Domain}}Service(repository {{Domain}}Repository) {{Domain}}Service {
+	return {{Domain}}Service{{"{"}}{{domain}}Repository: repository{{"}"}}
+}
+
+func (s *{{Domain}}Service) Create(ctx context.Context, userId string, item *model.{{Model}}) (*model.{{Model}}, error) {
+	if item == nil {
+		message := "{{domain}} cannot be nil"
+		log.Error(message)
+		return nil, errors.New(message)
+	}
+	item.UserId = userId
+	return s.{{domain}}Repository.Create(ctx, item)
+}
+
+func (s *{{Domain}}Service) List(ctx context.Context, userId string) ([]*model.{{Model}}, error) {
+	items := []*model.{{Model}}{}
+	if userId == "" {
+		return items, errors.New("userId is required to list {{domain}} items")
+	}
+	return s.{{domain}}Repository.List(ctx, userId)
+}
+
+func (s *{{Domain}}Service) Get(ctx context.Context, userId string, rawItemId string) (*model.{{Model}}, error) {
+	itemId, err := uuid.Parse(rawItemId)
+	if err != nil {
+		return nil, err
+	}
+	return s.{{domain}}Repository.Get(ctx, userId, itemId)
+}
+
+func (s *{{Domain}}Service) Update(ctx context.Context, userId string, item *model.{{Model}}) (*model.{{Model}}, error) {
+	return s.{{domain}}Repository.Update(ctx, userId, item)
+}
+
+func (s *{{Domain}}Service) Delete(ctx context.Context, userId string, rawItemId string) error {
+	itemId, err := uuid.Parse(rawItemId)
+	if err != nil {
+		return err
+	}
+	return s.{{domain}}Repository.Delete(ctx, userId, itemId)
+}

@@ -1,0 +1,16 @@
+package {{domain}}
+
+import (
+	"context"
+	"go-boilerplate-api/internal/app/model"
+
+	"github.com/google/uuid"
+)
+
+type {{Domain}}Repository interface {
+	Create(ctx context.Context, item *model.{{Model}}) (*model.{{Model}}, error)
+	List(ctx context.Context, userId string) ([]*model.{{Model}}, error)
+	Get(ctx context.Context, userId string, itemId uuid.UUID) (*model.{{Model}}, error)
+	Update(ctx context.Context, userId string, item *model.{{Model}}) (*model.{{Model}}, error)
+	Delete(ctx context.Context, userId string, itemId uuid.UUID) error
+}

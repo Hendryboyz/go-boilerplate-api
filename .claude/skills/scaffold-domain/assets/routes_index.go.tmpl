@@ -1,0 +1,15 @@
+package v{{version}}
+
+import (
+	"go-boilerplate-api/internal/app/api/http/handlers"
+
+	"github.com/gin-gonic/gin"
+)
+
+func RegisterRouterApi(
+	router *gin.RouterGroup,
+	{{domain}}Controller *handlers.{{Domain}}Controller,
+) {
+	{{domain}}Group := router.Group("/{{domain}}")
+	set{{Domain}}Routes({{domain}}Group, {{domain}}Controller)
+}
